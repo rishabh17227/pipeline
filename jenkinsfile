@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+    environment{
+        name='rishabh'
+        company='appsassociates'
+        ein='2210'
+        username = 'uday'
+    }
+    parameters {
+        string(name:'Pearson', defaultValue:'Rishabh Gaur',description: 'Who are you')
+        booleanParam(name:'ismale', defaultValue:'true',description: '')
+        choice(name:'City', choices:['Jaipur','Mumbai','Pune','Delhi'],description: '')
+    }
+
+    stages {
+        stage('Test') {
+            steps {
+                echo 'testing the code'
+            }
+        }
+        stage('Deploy-test') {
+            steps {
+                echo 'Deploying on test'
+            }
+        }
+        stage('Deploy-prod') {
+            steps {
+                echo 'Deploying on prod'
+                sh 'echo "${username}"'
+            }
+        }
+        stage('Run a command') {
+            steps {
+                sh '''
+                date
+                pwd
+                cal 2021
+                '''
+            }
+        }
+        stage('Environment variable') {
+            environment{
+                username ='rishabhgaur'
+            }
+            steps {
+                sh 'echo "${BUILD_ID}"'
+                sh 'echo "${name}"'
+                sh 'echo "${username}"'
+                sh 'echo "${ein}"'
+            }
+        }
+        stage('parameters') {
+            steps {
+                sh 'echo "${name}"'
+                sh 'echo "${Pearson}"'
+            }
+        }
+        stage('Continue ?') {
+            input {
+                message "shoul we continue ?"
+                ok "yes we should."
+            }
+            steps {
+                echo 'continue statement' 
+            }
+        }
+    }
+    post { 
+        always { 
+            echo 'I will always say Hello again!'
+        }
+        failure{ 
+            echo 'failure'
+        }
+        success{ 
+            echo 'success'
+        }
+    }
+}
